@@ -7,11 +7,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
+
+import com.example.lazyloading.listview.ListViewBaseAdapterBluePrint;
+import com.example.lazyloading.listview.ListViewBaseAdapterListPOJO;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -25,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLoadMore;
     private Context fContext;
     private Integer offset = 0;
-    private List<Coupon> coupons;
+    private List<Coupon> mCoupons = new ArrayList<>();
+    private ListViewBaseAdapterListPOJO mAdapter;
 
     private String ENDPOINT = "http://ja-designdio.com";
 
@@ -45,15 +53,56 @@ public class MainActivity extends AppCompatActivity {
         bindObj();
 
         loadData(offset);
+        renderListView();
+        loadMore();
 
-        refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                Toast.makeText(fContext, "Refreshing...", Toast.LENGTH_SHORT).show();
-                refresh.setRefreshing(false);
-            }
+
+    }
+
+    private void loadMore() {
+        btnLoadMore.setOnClickListener(v -> {
+            loadData(++offset);
+            notifyListView();
         });
+    }
 
+    private void notifyListView() {
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void renderListView() {
+        mAdapter = new ListViewBaseAdapterListPOJO(
+                fContext,
+                R.layout.listview_coupons,
+                mCoupons,
+                new ListViewBaseAdapterBluePrint() {
+                    @Override
+                    public void bindConvertView(View v) {
+
+                    }
+
+                    @Override
+                    public View getView(View v, int pos, JSONObject data) {
+                        return null;
+                    }
+
+                    @Override
+                    public View getView(View v, int pos, Object data) {
+                        Coupon coupon = (Coupon) data;
+                        TextView title = v.findViewById(R.id.txtTitle);
+                        TextView code = v.findViewById(R.id.txtCode);
+                        TextView description = v.findViewById(R.id.txtDescription);
+                        TextView enddate = v.findViewById(R.id.txtEndDate);
+                        title.setText(coupon.getTitle());
+                        code.setText(coupon.getCode());
+                        description.setText(coupon.getDescription());
+                        enddate.setText(coupon.getEndDate());
+                        return v;
+                    }
+                }
+        );
+
+        lvContent.setAdapter(mAdapter);
     }
 
     private void loadData(Integer offset) {
@@ -73,11 +122,11 @@ public class MainActivity extends AppCompatActivity {
                     CouponService.COUPON_TYPE
             );
 
-            coupons = call.execute().body();
+            List<Coupon> coupons = call.execute().body();
 
             if(coupons.size() > 0){
                 Log.d("Myapp",  String.format("Success : %s with size : %s", coupons.toString(), coupons.size()));
-                renderListView();
+                appendListCoupon(coupons);
             }else{
                 Log.d("Myapp", "Coupon not found.");
             }
@@ -87,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void renderListView() {
-
+    private void appendListCoupon(List<Coupon> coupons) {
+        mCoupons.addAll(coupons);
     }
 
     private void bindObj() {
