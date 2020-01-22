@@ -1,6 +1,6 @@
 ### Welcome to Android LazyLoading Tutorial!
-###### Pull and see TODO Tab for instructions## Pull and see TODO Tab for instructions
-###### Pull และดู แท็บ TODO สำหรับขั้นตอนการทำ## Pull และดู แท็บ TODO สำหรับขั้นตอนการทำ
+###### Pull and see TODO Tab for instructions
+###### Pull และดู แท็บ TODO สำหรับขั้นตอนการทำ
 ![](https://github.com/anubissmile/AndroidLazyLoadingTutorial/blob/master/app/src/main/res/drawable-v24/TODO.png?raw=true)
 
 **Dependencies**
