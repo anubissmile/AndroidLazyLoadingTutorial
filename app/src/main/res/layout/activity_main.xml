@@ -7,12 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btnLoadMore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="More" />
-
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"

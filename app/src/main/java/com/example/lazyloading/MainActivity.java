@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ListView lvContent;
     private SwipeRefreshLayout refresh;
-    private Button btnLoadMore;
     private Context fContext;
     private Integer offset = 0;
     private List<Coupon> mCoupons = new ArrayList<>();
@@ -52,17 +51,19 @@ public class MainActivity extends AppCompatActivity {
 
         bindObj();
 
+        refresh.setRefreshing(true);
         loadData(offset);
         renderListView();
-        loadMore();
+        onRefresh();
 
 
     }
 
-    private void loadMore() {
-        btnLoadMore.setOnClickListener(v -> {
+    private void onRefresh() {
+        refresh.setOnRefreshListener(() -> {
             loadData(++offset);
             notifyListView();
+            refresh.setRefreshing(false);
         });
     }
 
@@ -103,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         lvContent.setAdapter(mAdapter);
+        refresh.setRefreshing(false);
     }
 
     private void loadData(Integer offset) {
@@ -126,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(coupons.size() > 0){
                 Log.d("Myapp",  String.format("Success : %s with size : %s", coupons.toString(), coupons.size()));
-                appendListCoupon(coupons);
+                appendFirst(coupons);
             }else{
                 Log.d("Myapp", "Coupon not found.");
             }
@@ -136,12 +138,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void appendListCoupon(List<Coupon> coupons) {
-        mCoupons.addAll(coupons);
+    private void appendFirst(List<Coupon> coupons) {
+        mCoupons.addAll(0, coupons);
     }
 
     private void bindObj() {
-        btnLoadMore = findViewById(R.id.btnLoadMore);
         lvContent = findViewById(R.id.lvContent);
         refresh = findViewById(R.id.refresh);
     }
