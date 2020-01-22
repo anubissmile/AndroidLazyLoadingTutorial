@@ -30,8 +30,14 @@ public class MainActivity extends AppCompatActivity {
     private ListView lvContent;
     private SwipeRefreshLayout refresh;
     private Context fContext;
+
+//    TODO : STEP #5 สร้าง field offset สำหรับเก็บช่วงของข้อมูลที่เราจะดึงจาก api โดยเริ่มจาก 0
     private Integer offset = 0;
+
+//    TODO : STEP #6 สร้าง field mCoupons สำหรับเก็บข้อมูลที่ดึงจาก API และจะนำไปแสดงใน ListView
     private List<Coupon> mCoupons = new ArrayList<>();
+
+//    TODO : STEP #7 สร้าง field adapter สำหรับสร้าง แสดงรายการบน listview
     private ListViewBaseAdapterListPOJO mAdapter;
 
     private String ENDPOINT = "http://ja-designdio.com";
@@ -49,11 +55,16 @@ public class MainActivity extends AppCompatActivity {
 
         fContext = this;
 
+//        TODO : STEP #8 ทำการผูก View เข้ากับ Object
         bindObj();
 
         refresh.setRefreshing(true);
+//        TODO : STEP #9 ดึงข้อมูลช่วงแรกมาแสดงโดยการส่ง offset เข้าไป
         loadData(offset);
+//        TODO : STEP #12 นำข้อมูลที่ได้มาแสดงใส่ ListView
         renderListView();
+
+//        TODO : STEP #13 เขียน Listener สำหรับการโหลดข้อมูลเพิ่ม
         onRefresh();
 
 
@@ -61,7 +72,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void onRefresh() {
         refresh.setOnRefreshListener(() -> {
+//            TODO : STEP #14 ดึงข้อมูลช่วงต่อไปโดยการส่ง offset ของช่วงต่อไป
             loadData(++offset);
+
+//            TODO : STEP #15 เนื่องจากเราได้สร้าง adapter ไว้ในครั้งแรกแล้ว เราจะแจ้งให้ adapter อัพเดทข้อมูลใหม่ลงไปโดยใช้ mAdapter.notifyDataSetChanged()
             notifyListView();
             refresh.setRefreshing(false);
         });
@@ -124,10 +138,12 @@ public class MainActivity extends AppCompatActivity {
                     CouponService.COUPON_TYPE
             );
 
+//            TODO : STEP #10 ได้ข้อมูลมาจาก API
             List<Coupon> coupons = call.execute().body();
 
             if(coupons.size() > 0){
                 Log.d("Myapp",  String.format("Success : %s with size : %s", coupons.toString(), coupons.size()));
+//                TODO : STEP #11 นำข้อมูลช่วยที่ได้ต่อไปใน mCoupons
                 appendFirst(coupons);
             }else{
                 Log.d("Myapp", "Coupon not found.");
@@ -139,7 +155,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void appendFirst(List<Coupon> coupons) {
+//        ต่อหัว
         mCoupons.addAll(0, coupons);
+
+//        ต่อท้าย
+//        mCoupons.addAll(coupons);
     }
 
     private void bindObj() {

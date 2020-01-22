@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
+//TODO : STEP #3 สร้าง POJO class สำหรับรับ JSON จาก API
 @SuppressWarnings("unused")
 public class Coupon implements Serializable {
 

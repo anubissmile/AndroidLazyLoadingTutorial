@@ -24,9 +24,11 @@ android {
 
 dependencies {
 
+    // TODO : STEP #1 เพิ่ม lib สำหรับเรียก API (ในที่นี้จะใช้ Retrofit2 ฉะนั้นการเขียนโปรแกรมสำหรับการดึงข้อมูลอาจไม่เหมือนกัน)
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-jackson
     implementation group: 'com.squareup.retrofit2', name: 'converter-jackson', version: '2.5.0'
 
+    // TODO : STEP #2 เพิ่ม lib สำหรับแปลง JSON เป็น POJO class
     // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.1'
 
